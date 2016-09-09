@@ -1,13 +1,18 @@
 function main(folder,numofclasses)
     file=strcat(folder,'/Class1.txt');
-    D1=importdata(file);
+    A1=importdata(file);
+    len=length(A1)*.75;
+    D1 = A1(1:len,:);
     file=strcat(folder,'/Class2.txt');
-    D2=importdata(file);
+    A2=importdata(file);
+    len=length(A2)*.75;
+    D2 = A2(1:len,:);
     if(numofclasses==3)
         file=strcat(folder,'/Class3.txt');
-        D3=importdata(file);
+        A3=importdata(file);
+        len=length(A3)*.75;
+        D3 = A3(1:len,:);
     end
-    myMean(D1)  
-    myMean(D2)  
-    myMean(D3)  
+     %myCov(D1,myMean(D1))
+     %cov(D1)
 end    
