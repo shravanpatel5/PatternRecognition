@@ -7,6 +7,7 @@ function main(folder,numofclasses)
         file=strcat(folder,'/Class3.txt');
         D3=importdata(file);
     end
-    %for i= 1:numofclasses
-        
+    myMean(D1)  
+    myMean(D2)  
+    myMean(D3)  
 end    
