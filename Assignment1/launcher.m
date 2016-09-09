@@ -1,5 +1,7 @@
 prompt='Enter dataset number : ';
 dataset= input(prompt);
+prompt='Enter classifier number : ';
+classifier= input(prompt);
     if(dataset==1)
         folder='LS_Group9';
     elseif(dataset==2)
@@ -18,4 +20,4 @@ if(dataset<5 && dataset~=1)
 else
     numofclasses=3;
 end
-main(folder,numofclasses);
+main(folder,numofclasses,classifier);

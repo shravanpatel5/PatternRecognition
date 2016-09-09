@@ -11,5 +11,5 @@ function cov = myCov(data , mean)
         cov(1,2)=cov(1,2)+ ((data(i,1)-mean(1))*(data(i,2)-mean(2)));
     end
     cov(2,1)=cov(1,2);
-    cov = cov/len;
+    cov = cov/(len-1);
 end
