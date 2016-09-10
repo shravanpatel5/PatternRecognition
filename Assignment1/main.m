@@ -27,6 +27,7 @@ function main(folder,numofclasses,classifier)
         mean2 = myMean(D2);
         cov1 = myCov(D1,mean1);
         cov2 = myCov(D2,mean2);
+        confusion=zeros(2,2);
         if(classifier==1)
             cov = (cov1+cov2)/2;
             w11 = myTrans(myMult(myInv(cov),mean1));
@@ -38,9 +39,9 @@ function main(folder,numofclasses,classifier)
                 x1=g2(x,w11,w12);
                 x2=g2(x,w21,w22);
                 if(x1>x2)
-                    %11
+                    confusion(1,1)=confusion(1,1)+1;
                 else
-                    12
+                    confusion(1,2)=confusion(1,2)+1;
                 end
             end
             for i = 1:length(T2)
@@ -48,9 +49,9 @@ function main(folder,numofclasses,classifier)
                 x1=g2(x,w11,w12);
                 x2=g2(x,w21,w22);
                 if(x1>x2)
-                    21
+                    confusion(2,1)=confusion(2,1)+1;
                 else
-                    %22
+                    confusion(2,2)=confusion(2,2)+1;
                 end
             end
         elseif(classifier==2)
@@ -64,9 +65,9 @@ function main(folder,numofclasses,classifier)
                 x1=g2(x,w11,w12);
                 x2=g2(x,w21,w22);
                 if(x1>x2)
-                    %11
+                    confusion(1,1)=confusion(1,1)+1;
                 else
-                    12
+                    confusion(1,2)=confusion(1,2)+1;
                 end
             end
             for i = 1:length(T2)
@@ -74,9 +75,9 @@ function main(folder,numofclasses,classifier)
                 x1=g2(x,w11,w12);
                 x2=g2(x,w21,w22);
                 if(x1>x2)
-                    21
+                    confusion(2,1)=confusion(2,1)+1;
                 else
-                    %22
+                    confusion(2,2)=confusion(2,2)+1;
                 end
             end
         elseif(classifier==3)
@@ -89,9 +90,9 @@ function main(folder,numofclasses,classifier)
                 x1=g3(x,cov1,w11,w12);
                 x2=g3(x,cov2,w21,w22);
                 if(x1>x2)
-                    %11
+                    confusion(1,1)=confusion(1,1)+1;
                 else
-                    12
+                    confusion(1,2)=confusion(1,2)+1;
                 end
             end
             for i = 1:length(T2)
@@ -99,9 +100,9 @@ function main(folder,numofclasses,classifier)
                 x1=g3(x,cov1,w11,w12);
                 x2=g3(x,cov2,w21,w22);
                 if(x1>x2)
-                    21
+                    confusion(2,1)=confusion(2,1)+1;
                 else
-                    %22
+                    confusion(2,2)=confusion(2,2)+1;
                 end
             end
         elseif(classifier==4)
@@ -119,9 +120,9 @@ function main(folder,numofclasses,classifier)
                 x1=g1(x,w11,w12);
                 x2=g1(x,w21,w22);
                 if(x1>x2)
-                    %11
+                    confusion(1,1)=confusion(1,1)+1;
                 else
-                    12
+                    confusion(1,2)=confusion(1,2)+1;
                 end
             end
             for i = 1:length(T2)
@@ -129,9 +130,9 @@ function main(folder,numofclasses,classifier)
                 x1=g1(x,w11,w12);
                 x2=g1(x,w21,w22);
                 if(x1>x2)
-                    21
+                    confusion(2,1)=confusion(2,1)+1;
                 else
-                    %22
+                    confusion(2,2)=confusion(2,2)+1;
                 end
             end
         elseif(classifier==5)
@@ -146,9 +147,9 @@ function main(folder,numofclasses,classifier)
                 x1=g2(x,w11,w12);
                 x2=g2(x,w21,w22);
                 if(x1>x2)
-                    %11
+                    confusion(1,1)=confusion(1,1)+1;
                 else
-                    12
+                    confusion(1,2)=confusion(1,2)+1;
                 end
             end
             for i = 1:length(T2)
@@ -156,9 +157,9 @@ function main(folder,numofclasses,classifier)
                 x1=g2(x,w11,w12);
                 x2=g2(x,w21,w22);
                 if(x1>x2)
-                    21
+                    confusion(2,1)=confusion(2,1)+1;
                 else
-                    %22
+                    confusion(2,2)=confusion(2,2)+1;
                 end
             end
         elseif(classifier==6)
@@ -173,9 +174,9 @@ function main(folder,numofclasses,classifier)
                 x1=g3(x,cov1,w11,w12);
                 x2=g3(x,cov2,w21,w22);
                 if(x1>x2)
-                    %11
+                    confusion(1,1)=confusion(1,1)+1;
                 else
-                    12
+                    confusion(1,2)=confusion(1,2)+1;
                 end
             end
             for i = 1:length(T2)
@@ -183,12 +184,49 @@ function main(folder,numofclasses,classifier)
                 x1=g3(x,cov1,w11,w12);
                 x2=g3(x,cov2,w21,w22);
                 if(x1>x2)
-                    21
+                    confusion(2,1)=confusion(2,1)+1;
                 else
-                    %22
+                    confusion(2,2)=confusion(2,2)+1;
                 end
             end
         end
+        N1 = length(T1);
+        N2 = length(T2);
+        N=N1+N2;
+        TP1=confusion(1,1)+confusion(2,1);
+        TP2=confusion(1,2)+confusion(2,2);
+        TC1=confusion(1,1);
+        TC2=confusion(2,2);
+        Accuracy = (TC1+TC2)/N;
+        Precision(1)=0;
+        Precision(2)=0;
+        if(TP1~=0)
+            Precision(1) = TC1/TP1;
+        end
+        if(TP2~=0)
+            Precision(2) = TC2/TP2;
+        end
+        MeanPrecision = (Precision(1)+Precision(2))/2;
+        Recall(1) = TC1/N1;
+        Recall(2) = TC2/N2;
+        MeanRecall = (Recall(1)+Recall(2))/2;
+        Fmeasure(1)=0;
+        Fmeasure(2)=0;
+        if(Precision(1)+Recall(1) ~= 0)
+            Fmeasure(1) = (2*Precision(1)*Recall(1))/(Precision(1)+Recall(1));
+        end
+        if(Precision(2)+Recall(2) ~= 0)
+            Fmeasure(2) = (2*Precision(2)*Recall(2))/(Precision(2)+Recall(2));
+        end
+        MeanFmeasure = (Fmeasure(1)+Fmeasure(2))/2;
+        confusion
+        Accuracy
+        Precision
+        MeanPrecision
+        Recall
+        MeanRecall
+        Fmeasure
+        MeanFmeasure
     else
         len=len1+len2+len3;
         probc1=len1/len;
@@ -200,6 +238,7 @@ function main(folder,numofclasses,classifier)
         cov1 = myCov(D1,mean1);
         cov2 = myCov(D2,mean2);
         cov3 = myCov(D3,mean3);
+        confusion=zeros(3,3);
         if(classifier==1)
             cov = (cov1+cov2+cov3)/2;
             w11 = myTrans(myMult(myInv(cov),mean1));
@@ -214,11 +253,11 @@ function main(folder,numofclasses,classifier)
                 x2=g2(x,w21,w22);
                 x3=g2(x,w31,w32);
                 if(x1>x2 && x1>x3)
-                    %11
+                    confusion(1,1)=confusion(1,1)+1;
                 elseif(x2>x1 && x2>x3)
-                    12
+                    confusion(1,2)=confusion(1,2)+1;
                 elseif(x3>x1 && x3>x2)
-                    13
+                    confusion(1,3)=confusion(1,3)+1;
                 end
             end
             for i = 1:length(T2)
@@ -227,11 +266,11 @@ function main(folder,numofclasses,classifier)
                 x2=g2(x,w21,w22);
                 x3=g2(x,w31,w32);
                 if(x1>x2 && x1>x3)
-                    21
+                    confusion(2,1)=confusion(2,1)+1;
                 elseif(x2>x1 && x2>x3)
-                    %22
+                    confusion(2,2)=confusion(2,2)+1;
                 elseif(x3>x1 && x3>x2)
-                    23
+                    confusion(2,3)=confusion(2,3)+1;
                 end
             end
             for i = 1:length(T3)
@@ -240,11 +279,11 @@ function main(folder,numofclasses,classifier)
                 x2=g2(x,w21,w22);
                 x3=g2(x,w31,w32);
                 if(x1>x2 && x1>x3)
-                    31
+                    confusion(3,1)=confusion(3,1)+1;
                 elseif(x2>x1 && x2>x3)
-                    32
+                    confusion(3,2)=confusion(3,2)+1;
                 elseif(x3>x1 && x3>x2)
-                    %33
+                    confusion(3,3)=confusion(3,3)+1;
                 end
             end
         elseif(classifier==2)
@@ -261,11 +300,11 @@ function main(folder,numofclasses,classifier)
                 x2=g2(x,w21,w22);
                 x3=g2(x,w31,w32);
                 if(x1>x2 && x1>x3)
-                    %11
+                    confusion(1,1)=confusion(1,1)+1;
                 elseif(x2>x1 && x2>x3)
-                    12
+                    confusion(1,2)=confusion(1,2)+1;
                 elseif(x3>x1 && x3>x2)
-                    13
+                    confusion(1,3)=confusion(1,3)+1;
                 end
             end
             for i = 1:length(T2)
@@ -274,11 +313,11 @@ function main(folder,numofclasses,classifier)
                 x2=g2(x,w21,w22);
                 x3=g2(x,w31,w32);
                 if(x1>x2 && x1>x3)
-                    21
+                    confusion(2,1)=confusion(2,1)+1;
                 elseif(x2>x1 && x2>x3)
-                    %22
+                    confusion(2,2)=confusion(2,2)+1;
                 elseif(x3>x1 && x3>x2)
-                    23
+                    confusion(2,3)=confusion(2,3)+1;
                 end
             end
             for i = 1:length(T3)
@@ -287,11 +326,11 @@ function main(folder,numofclasses,classifier)
                 x2=g2(x,w21,w22);
                 x3=g2(x,w31,w32);
                 if(x1>x2 && x1>x3)
-                    31
+                    confusion(3,1)=confusion(3,1)+1;
                 elseif(x2>x1 && x2>x3)
-                    32
+                    confusion(3,2)=confusion(3,2)+1;
                 elseif(x3>x1 && x3>x2)
-                    %33
+                    confusion(3,3)=confusion(3,3)+1;
                 end
             end
         elseif(classifier==3)
@@ -307,11 +346,11 @@ function main(folder,numofclasses,classifier)
                 x2=g3(x,cov2,w21,w22);
                 x3=g3(x,cov3,w31,w32);
                 if(x1>x2 && x1>x3)
-                    %11
+                    confusion(1,1)=confusion(1,1)+1;
                 elseif(x2>x1 && x2>x3)
-                    12
+                    confusion(1,2)=confusion(1,2)+1;
                 elseif(x3>x1 && x3>x2)
-                    13
+                    confusion(1,3)=confusion(1,3)+1;
                 end
             end
             for i = 1:length(T2)
@@ -320,11 +359,11 @@ function main(folder,numofclasses,classifier)
                 x2=g3(x,cov2,w21,w22);
                 x3=g3(x,cov3,w31,w32);
                 if(x1>x2 && x1>x3)
-                    21
+                    confusion(2,1)=confusion(2,1)+1;
                 elseif(x2>x1 && x2>x3)
-                    %22
+                    confusion(2,2)=confusion(2,2)+1;
                 elseif(x3>x1 && x3>x2)
-                    23
+                    confusion(2,3)=confusion(2,3)+1;
                 end
             end
             for i = 1:length(T3)
@@ -333,11 +372,11 @@ function main(folder,numofclasses,classifier)
                 x2=g3(x,cov2,w21,w22);
                 x3=g3(x,cov3,w31,w32);
                 if(x1>x2 && x1>x3)
-                    31
+                    confusion(3,1)=confusion(3,1)+1;
                 elseif(x2>x1 && x2>x3)
-                    32
+                    confusion(3,2)=confusion(3,2)+1;
                 elseif(x3>x1 && x3>x2)
-                    %33
+                    confusion(3,3)=confusion(3,3)+1;
                 end
             end
         elseif(classifier==4)
@@ -358,11 +397,11 @@ function main(folder,numofclasses,classifier)
                 x2=g1(x,w21,w22);
                 x3=g1(x,w31,w32);
                 if(x1>x2 && x1>x3)
-                    %11
+                    confusion(1,1)=confusion(1,1)+1;
                 elseif(x2>x1 && x2>x3)
-                    12
+                    confusion(1,2)=confusion(1,2)+1;
                 elseif(x3>x1 && x3>x2)
-                    13
+                    confusion(1,3)=confusion(1,3)+1;
                 end
             end
             for i = 1:length(T2)
@@ -371,11 +410,11 @@ function main(folder,numofclasses,classifier)
                 x2=g1(x,w21,w22);
                 x3=g1(x,w31,w32);
                 if(x1>x2 && x1>x3)
-                    21
+                    confusion(2,1)=confusion(2,1)+1;
                 elseif(x2>x1 && x2>x3)
-                    %22
+                    confusion(2,2)=confusion(2,2)+1;
                 elseif(x3>x1 && x3>x2)
-                    23
+                    confusion(2,3)=confusion(2,3)+1;
                 end
             end
             for i = 1:length(T3)
@@ -384,11 +423,11 @@ function main(folder,numofclasses,classifier)
                 x2=g1(x,w21,w22);
                 x3=g1(x,w31,w32);
                 if(x1>x2 && x1>x3)
-                    31
+                    confusion(3,1)=confusion(3,1)+1;
                 elseif(x2>x1 && x2>x3)
-                    32
+                    confusion(3,2)=confusion(3,2)+1;
                 elseif(x3>x1 && x3>x2)
-                    %33
+                    confusion(3,3)=confusion(3,3)+1;
                 end
             end
         elseif(classifier==5)
@@ -406,11 +445,11 @@ function main(folder,numofclasses,classifier)
                 x2=g2(x,w21,w22);
                 x3=g2(x,w31,w32);
                 if(x1>x2 && x1>x3)
-                    %11
+                    confusion(1,1)=confusion(1,1)+1;
                 elseif(x2>x1 && x2>x3)
-                    12
+                    confusion(1,2)=confusion(1,2)+1;
                 elseif(x3>x1 && x3>x2)
-                    13
+                    confusion(1,3)=confusion(1,3)+1;
                 end
             end
             for i = 1:length(T2)
@@ -419,11 +458,11 @@ function main(folder,numofclasses,classifier)
                 x2=g2(x,w21,w22);
                 x3=g2(x,w31,w32);
                 if(x1>x2 && x1>x3)
-                    21
+                    confusion(2,1)=confusion(2,1)+1;
                 elseif(x2>x1 && x2>x3)
-                    %22
+                    confusion(2,2)=confusion(2,2)+1;
                 elseif(x3>x1 && x3>x2)
-                    23
+                    confusion(2,3)=confusion(2,3)+1;
                 end
             end
             for i = 1:length(T3)
@@ -432,11 +471,11 @@ function main(folder,numofclasses,classifier)
                 x2=g2(x,w21,w22);
                 x3=g2(x,w31,w32);
                 if(x1>x2 && x1>x3)
-                    31
+                    confusion(3,1)=confusion(3,1)+1;
                 elseif(x2>x1 && x2>x3)
-                    32
+                    confusion(3,2)=confusion(3,2)+1;
                 elseif(x3>x1 && x3>x2)
-                    %33
+                    confusion(3,3)=confusion(3,3)+1;
                 end
             end
         elseif(classifier==6)
@@ -455,11 +494,11 @@ function main(folder,numofclasses,classifier)
                 x2=g3(x,cov2,w21,w22);
                 x3=g3(x,cov3,w31,w32);
                 if(x1>x2 && x1>x3)
-                    %11
+                    confusion(1,1)=confusion(1,1)+1;
                 elseif(x2>x1 && x2>x3)
-                    12
+                    confusion(1,2)=confusion(1,2)+1;
                 elseif(x3>x1 && x3>x2)
-                    13
+                    confusion(1,3)=confusion(1,3)+1;
                 end
             end
             for i = 1:length(T2)
@@ -468,11 +507,11 @@ function main(folder,numofclasses,classifier)
                 x2=g3(x,cov2,w21,w22);
                 x3=g3(x,cov3,w31,w32);
                 if(x1>x2 && x1>x3)
-                    21
+                    confusion(2,1)=confusion(2,1)+1;
                 elseif(x2>x1 && x2>x3)
-                    %22
+                    confusion(2,2)=confusion(2,2)+1;
                 elseif(x3>x1 && x3>x2)
-                    23
+                    confusion(2,3)=confusion(2,3)+1;
                 end
             end
             for i = 1:length(T3)
@@ -481,13 +520,62 @@ function main(folder,numofclasses,classifier)
                 x2=g3(x,cov2,w21,w22);
                 x3=g3(x,cov3,w31,w32);
                 if(x1>x2 && x1>x3)
-                    31
+                    confusion(3,1)=confusion(3,1)+1;
                 elseif(x2>x1 && x2>x3)
-                    32
+                    confusion(3,2)=confusion(3,2)+1;
                 elseif(x3>x1 && x3>x2)
-                    %33
+                    confusion(3,3)=confusion(3,3)+1;
                 end
             end
         end
+        N1 = length(T1);
+        N2 = length(T2);
+        N3 = length(T3);
+        N=N1+N2+N3;
+        TP1=confusion(1,1)+confusion(2,1)+confusion(3,1);
+        TP2=confusion(1,2)+confusion(2,2)+confusion(3,2);
+        TP3=confusion(1,3)+confusion(2,3)+confusion(3,3);
+        TC1=confusion(1,1);
+        TC2=confusion(2,2);
+        TC3=confusion(3,3);
+        Precision(1)=0;
+        Precision(2)=0;
+        Precision(3)=0;
+        Accuracy = (TC1+TC2+TC3)/N;
+        if(TP1~=0)
+            Precision(1) = TC1/TP1;
+        end
+        if(TP2~=0)
+            Precision(2) = TC2/TP2;
+        end
+        if(TP3~=0)
+            Precision(3) = TC3/TP3;
+        end
+        MeanPrecision = (Precision(1)+Precision(2)+Precision(3))/3;
+        Recall(1) = TC1/N1;
+        Recall(2) = TC2/N2;
+        Recall(3) = TC3/N3;
+        MeanRecall = (Recall(1)+Recall(2)+Recall(3))/3;
+        Fmeasure(1)=0;
+        Fmeasure(2)=0;
+        Fmeasure(3)=0;
+        if(Precision(1)+Recall(1) ~= 0)
+            Fmeasure(1) = (2*Precision(1)*Recall(1))/(Precision(1)+Recall(1));
+        end
+        if(Precision(2)+Recall(2) ~= 0)
+            Fmeasure(2) = (2*Precision(2)*Recall(2))/(Precision(2)+Recall(2));
+        end
+        if(Precision(3)+Recall(3) ~= 0)
+            Fmeasure(3) = (2*Precision(3)*Recall(3))/(Precision(3)+Recall(3));
+        end
+        MeanFmeasure = (Fmeasure(1)+Fmeasure(2)+Fmeasure(3))/3;
+        confusion
+        Accuracy
+        Precision
+        MeanPrecision
+        Recall
+        MeanRecall
+        Fmeasure
+        MeanFmeasure
     end
 end    
