@@ -1,4 +1,4 @@
-function main(folder,numofclasses,classifier)
+function main(folder,numofclasses,classifier,name)
     file=strcat(folder,'/Class1.txt');
     A1=importdata(file);
     len=length(A1);
@@ -28,6 +28,10 @@ function main(folder,numofclasses,classifier)
         cov1 = myCov(D1,mean1);
         cov2 = myCov(D2,mean2);
         confusion=zeros(2,2);
+        X1 = D1(:,1);
+        Y1 = D1(:,2);
+        X2 = D2(:,1);
+        Y2 = D2(:,2);
         if(classifier==1)
             cov = (cov1+cov2)/2;
             w11 = myTrans(myMult(myInv(cov),mean1));
@@ -40,8 +44,12 @@ function main(folder,numofclasses,classifier)
                 x2=g2(x,w21,w22);
                 if(x1>x2)
                     confusion(1,1)=confusion(1,1)+1;
+                    X1=[X1 ;x(1)];
+                    Y1=[Y1 ;x(2)];
                 else
                     confusion(1,2)=confusion(1,2)+1;
+                    X2=[X2 ;x(1)];
+                    Y2=[Y2 ;x(2)];
                 end
             end
             for i = 1:length(T2)
@@ -50,10 +58,57 @@ function main(folder,numofclasses,classifier)
                 x2=g2(x,w21,w22);
                 if(x1>x2)
                     confusion(2,1)=confusion(2,1)+1;
+                    X1=[X1 ;x(1)];
+                    Y1=[Y1 ;x(2)];
                 else
                     confusion(2,2)=confusion(2,2)+1;
+                    X2=[X2 ;x(1)];
+                    Y2=[Y2 ;x(2)];
                 end
             end
+            maxX=max(max(X1),max(X2));
+            minX=min(min(X1),min(X2));
+            maxY=max(max(Y1),max(Y2));
+            minY=min(min(Y1),min(Y2));
+            minX=minX-1;
+            maxX=maxX+1;
+            minY=minY-1;
+            maxY=maxY+1;
+            incX=(maxX-minX)/150;
+            incY=(maxY-minY)/150;
+            BX1=0;
+            BY1=0;
+            BX2=0;
+            BY2=0;
+            row=0;
+            for bgx = minX:incX:maxX
+                row = row+1;
+                col=0;
+                for bgy = minY:incY:maxY
+                    col = col+1;;
+                    CX(row,col)=bgx;
+                    CY(row,col)=bgy;
+                    x=[bgx;bgy];
+                    x1=g2(x,w11,w12);
+                    x2=g2(x,w21,w22);
+                    CZ1(row,col)=(x1*100);
+                    CZ2(row,col)=(x2*100);
+                    if(x1>x2)
+                        BX1=[BX1 ;x(1)];
+                        BY1=[BY1 ;x(2)];
+                    else
+                        BX2=[BX2 ;x(1)];
+                        BY2=[BY2 ;x(2)];
+                    end
+                end
+            end
+            BX1 = BX1(2:length(BX1));
+            BX2 = BX2(2:length(BX2));
+            BY1 = BY1(2:length(BY1));
+            BY2 = BY2(2:length(BY2));
+            plot(BX1,BY1,'.','Color',[1 .5 .5]),hold on,plot(BX2,BY2,'.','Color',[.5 .5 1]),plot(X1,Y1,'r.',X2,Y2,'b.'),axis([minX maxX minY maxY]),xlabel('x'),ylabel('y'),title(strcat(name,'-AllClasses')),legend('Class1','Class2'),set(gca,'Color',[1 1 1]),hold off;
+            figure
+            contour(CX,CY,CZ1,'r'),hold on,contour(CX,CY,CZ2,'b'),legend('Class1','Class2'),xlabel('x'),ylabel('y'),title(strcat(name,'-Contour')),hold off
         elseif(classifier==2)
             cov = myCov([D1;D2],myMean([D1;D2]));
             w11 = myTrans(myMult(myInv(cov),mean1));
@@ -66,8 +121,12 @@ function main(folder,numofclasses,classifier)
                 x2=g2(x,w21,w22);
                 if(x1>x2)
                     confusion(1,1)=confusion(1,1)+1;
+                    X1=[X1 ;x(1)];
+                    Y1=[Y1 ;x(2)];
                 else
                     confusion(1,2)=confusion(1,2)+1;
+                    X2=[X2 ;x(1)];
+                    Y2=[Y2 ;x(2)];
                 end
             end
             for i = 1:length(T2)
@@ -76,10 +135,57 @@ function main(folder,numofclasses,classifier)
                 x2=g2(x,w21,w22);
                 if(x1>x2)
                     confusion(2,1)=confusion(2,1)+1;
+                    X1=[X1 ;x(1)];
+                    Y1=[Y1 ;x(2)];
                 else
                     confusion(2,2)=confusion(2,2)+1;
+                    X2=[X2 ;x(1)];
+                    Y2=[Y2 ;x(2)];
                 end
             end
+            maxX=max(max(X1),max(X2));
+            minX=min(min(X1),min(X2));
+            maxY=max(max(Y1),max(Y2));
+            minY=min(min(Y1),min(Y2));
+            minX=minX-1;
+            maxX=maxX+1;
+            minY=minY-1;
+            maxY=maxY+1;
+            incX=(maxX-minX)/150;
+            incY=(maxY-minY)/150;
+            BX1=0;
+            BY1=0;
+            BX2=0;
+            BY2=0;
+            row=0;
+            for bgx = minX:incX:maxX
+                row = row+1;
+                col=0;
+                for bgy = minY:incY:maxY
+                    col = col+1;;
+                    CX(row,col)=bgx;
+                    CY(row,col)=bgy;
+                    x=[bgx;bgy];
+                    x1=g2(x,w11,w12);
+                    x2=g2(x,w21,w22);
+                    CZ1(row,col)=(x1*100);
+                    CZ2(row,col)=(x2*100);
+                    if(x1>x2)
+                        BX1=[BX1 ;x(1)];
+                        BY1=[BY1 ;x(2)];
+                    else
+                        BX2=[BX2 ;x(1)];
+                        BY2=[BY2 ;x(2)];
+                    end
+                end
+            end
+            BX1 = BX1(2:length(BX1));
+            BX2 = BX2(2:length(BX2));
+            BY1 = BY1(2:length(BY1));
+            BY2 = BY2(2:length(BY2));
+            plot(BX1,BY1,'.','Color',[1 .5 .5]),hold on,plot(BX2,BY2,'.','Color',[.5 .5 1]),plot(X1,Y1,'r.',X2,Y2,'b.'),axis([minX maxX minY maxY]),xlabel('x'),ylabel('y'),title(strcat(name,'-AllClasses')),legend('Class1','Class2'),set(gca,'Color',[1 1 1]),hold off;
+            figure
+            contour(CX,CY,CZ1,'r'),hold on,contour(CX,CY,CZ2,'b'),legend('Class1','Class2'),xlabel('x'),ylabel('y'),title(strcat(name,'-Contour')),hold off
         elseif(classifier==3)
             w11 = myMult(myTrans(mean1),myInv(cov1));
             w12 = - (0.5*myMult(myMult(myTrans(mean1),myInv(cov1)),mean1)) + log(probc1) - (0.5*log(abs(myMod(cov1))));
@@ -91,8 +197,12 @@ function main(folder,numofclasses,classifier)
                 x2=g3(x,cov2,w21,w22);
                 if(x1>x2)
                     confusion(1,1)=confusion(1,1)+1;
+                    X1=[X1 ;x(1)];
+                    Y1=[Y1 ;x(2)];
                 else
                     confusion(1,2)=confusion(1,2)+1;
+                    X2=[X2 ;x(1)];
+                    Y2=[Y2 ;x(2)];
                 end
             end
             for i = 1:length(T2)
@@ -101,10 +211,57 @@ function main(folder,numofclasses,classifier)
                 x2=g3(x,cov2,w21,w22);
                 if(x1>x2)
                     confusion(2,1)=confusion(2,1)+1;
+                    X1=[X1 ;x(1)];
+                    Y1=[Y1 ;x(2)];
                 else
                     confusion(2,2)=confusion(2,2)+1;
+                    X2=[X2 ;x(1)];
+                    Y2=[Y2 ;x(2)];
                 end
             end
+            maxX=max(max(X1),max(X2));
+            minX=min(min(X1),min(X2));
+            maxY=max(max(Y1),max(Y2));
+            minY=min(min(Y1),min(Y2));
+            minX=minX-1;
+            maxX=maxX+1;
+            minY=minY-1;
+            maxY=maxY+1;
+            incX=(maxX-minX)/150;
+            incY=(maxY-minY)/150;
+            BX1=0;
+            BY1=0;
+            BX2=0;
+            BY2=0;
+            row=0;
+            for bgx = minX:incX:maxX
+                row = row+1;
+                col=0;
+                for bgy = minY:incY:maxY
+                    col = col+1;;
+                    CX(row,col)=bgx;
+                    CY(row,col)=bgy;
+                    x=[bgx;bgy];
+                    x1=g3(x,cov1,w11,w12);
+                    x2=g3(x,cov2,w21,w22);
+                    CZ1(row,col)=(x1*100);
+                    CZ2(row,col)=(x2*100);
+                    if(x1>x2)
+                        BX1=[BX1 ;x(1)];
+                        BY1=[BY1 ;x(2)];
+                    else
+                        BX2=[BX2 ;x(1)];
+                        BY2=[BY2 ;x(2)];
+                    end
+                end
+            end
+            BX1 = BX1(2:length(BX1));
+            BX2 = BX2(2:length(BX2));
+            BY1 = BY1(2:length(BY1));
+            BY2 = BY2(2:length(BY2));
+            plot(BX1,BY1,'.','Color',[1 .5 .5]),hold on,plot(BX2,BY2,'.','Color',[.5 .5 1]),plot(X1,Y1,'r.',X2,Y2,'b.'),axis([minX maxX minY maxY]),xlabel('x'),ylabel('y'),title(strcat(name,'-AllClasses')),legend('Class1','Class2'),set(gca,'Color',[1 1 1]),hold off;
+            figure
+            contour(CX,CY,CZ1,'r'),hold on,contour(CX,CY,CZ2,'b'),legend('Class1','Class2'),xlabel('x'),ylabel('y'),title(strcat(name,'-Contour')),hold off
         elseif(classifier==4)
             cov = (cov1+cov2)/2;
             cov = diag(diag(cov));
@@ -121,8 +278,12 @@ function main(folder,numofclasses,classifier)
                 x2=g1(x,w21,w22);
                 if(x1>x2)
                     confusion(1,1)=confusion(1,1)+1;
+                    X1=[X1 ;x(1)];
+                    Y1=[Y1 ;x(2)];
                 else
                     confusion(1,2)=confusion(1,2)+1;
+                    X2=[X2 ;x(1)];
+                    Y2=[Y2 ;x(2)];
                 end
             end
             for i = 1:length(T2)
@@ -131,10 +292,57 @@ function main(folder,numofclasses,classifier)
                 x2=g1(x,w21,w22);
                 if(x1>x2)
                     confusion(2,1)=confusion(2,1)+1;
+                    X1=[X1 ;x(1)];
+                    Y1=[Y1 ;x(2)];
                 else
                     confusion(2,2)=confusion(2,2)+1;
+                    X2=[X2 ;x(1)];
+                    Y2=[Y2 ;x(2)];
                 end
             end
+            maxX=max(max(X1),max(X2));
+            minX=min(min(X1),min(X2));
+            maxY=max(max(Y1),max(Y2));
+            minY=min(min(Y1),min(Y2));
+            minX=minX-1;
+            maxX=maxX+1;
+            minY=minY-1;
+            maxY=maxY+1;
+            incX=(maxX-minX)/150;
+            incY=(maxY-minY)/150;
+            BX1=0;
+            BY1=0;
+            BX2=0;
+            BY2=0;
+            row=0;
+            for bgx = minX:incX:maxX
+                row = row+1;
+                col=0;
+                for bgy = minY:incY:maxY
+                    col = col+1;;
+                    CX(row,col)=bgx;
+                    CY(row,col)=bgy;
+                    x=[bgx;bgy];
+                    x1=g1(x,w11,w12);
+                    x2=g1(x,w21,w22);
+                    CZ1(row,col)=(x1*100);
+                    CZ2(row,col)=(x2*100);
+                    if(x1>x2)
+                        BX1=[BX1 ;x(1)];
+                        BY1=[BY1 ;x(2)];
+                    else
+                        BX2=[BX2 ;x(1)];
+                        BY2=[BY2 ;x(2)];
+                    end
+                end
+            end
+            BX1 = BX1(2:length(BX1));
+            BX2 = BX2(2:length(BX2));
+            BY1 = BY1(2:length(BY1));
+            BY2 = BY2(2:length(BY2));
+            plot(BX1,BY1,'.','Color',[1 .5 .5]),hold on,plot(BX2,BY2,'.','Color',[.5 .5 1]),plot(X1,Y1,'r.',X2,Y2,'b.'),axis([minX maxX minY maxY]),xlabel('x'),ylabel('y'),title(strcat(name,'-AllClasses')),legend('Class1','Class2'),set(gca,'Color',[1 1 1]),hold off;
+            figure
+            contour(CX,CY,CZ1,'r'),hold on,contour(CX,CY,CZ2,'b'),legend('Class1','Class2'),xlabel('x'),ylabel('y'),title(strcat(name,'-Contour')),hold off
         elseif(classifier==5)
             cov = (cov1+cov2)/2;
             cov = diag(diag(cov));
@@ -148,8 +356,12 @@ function main(folder,numofclasses,classifier)
                 x2=g2(x,w21,w22);
                 if(x1>x2)
                     confusion(1,1)=confusion(1,1)+1;
+                    X1=[X1 ;x(1)];
+                    Y1=[Y1 ;x(2)];
                 else
                     confusion(1,2)=confusion(1,2)+1;
+                    X2=[X2 ;x(1)];
+                    Y2=[Y2 ;x(2)];
                 end
             end
             for i = 1:length(T2)
@@ -158,10 +370,57 @@ function main(folder,numofclasses,classifier)
                 x2=g2(x,w21,w22);
                 if(x1>x2)
                     confusion(2,1)=confusion(2,1)+1;
+                    X1=[X1 ;x(1)];
+                    Y1=[Y1 ;x(2)];
                 else
                     confusion(2,2)=confusion(2,2)+1;
+                    X2=[X2 ;x(1)];
+                    Y2=[Y2 ;x(2)];
                 end
             end
+            maxX=max(max(X1),max(X2));
+            minX=min(min(X1),min(X2));
+            maxY=max(max(Y1),max(Y2));
+            minY=min(min(Y1),min(Y2));
+            minX=minX-1;
+            maxX=maxX+1;
+            minY=minY-1;
+            maxY=maxY+1;
+            incX=(maxX-minX)/150;
+            incY=(maxY-minY)/150;
+            BX1=0;
+            BY1=0;
+            BX2=0;
+            BY2=0;
+            row=0;
+            for bgx = minX:incX:maxX
+                row = row+1;
+                col=0;
+                for bgy = minY:incY:maxY
+                    col = col+1;;
+                    CX(row,col)=bgx;
+                    CY(row,col)=bgy;
+                    x=[bgx;bgy];
+                    x1=g2(x,w11,w12);
+                    x2=g2(x,w21,w22);
+                    CZ1(row,col)=(x1*100);
+                    CZ2(row,col)=(x2*100);
+                    if(x1>x2)
+                        BX1=[BX1 ;x(1)];
+                        BY1=[BY1 ;x(2)];
+                    else
+                        BX2=[BX2 ;x(1)];
+                        BY2=[BY2 ;x(2)];
+                    end
+                end
+            end
+            BX1 = BX1(2:length(BX1));
+            BX2 = BX2(2:length(BX2));
+            BY1 = BY1(2:length(BY1));
+            BY2 = BY2(2:length(BY2));
+            plot(BX1,BY1,'.','Color',[1 .5 .5]),hold on,plot(BX2,BY2,'.','Color',[.5 .5 1]),plot(X1,Y1,'r.',X2,Y2,'b.'),axis([minX maxX minY maxY]),xlabel('x'),ylabel('y'),title(strcat(name,'-AllClasses')),legend('Class1','Class2'),set(gca,'Color',[1 1 1]),hold off;
+            figure
+            contour(CX,CY,CZ1,'r'),hold on,contour(CX,CY,CZ2,'b'),legend('Class1','Class2'),xlabel('x'),ylabel('y'),title(strcat(name,'-Contour')),hold off
         elseif(classifier==6)
             cov1=diag(diag(cov1));
             cov2=diag(diag(cov2));
@@ -175,8 +434,12 @@ function main(folder,numofclasses,classifier)
                 x2=g3(x,cov2,w21,w22);
                 if(x1>x2)
                     confusion(1,1)=confusion(1,1)+1;
+                    X1=[X1 ;x(1)];
+                    Y1=[Y1 ;x(2)];
                 else
                     confusion(1,2)=confusion(1,2)+1;
+                    X2=[X2 ;x(1)];
+                    Y2=[Y2 ;x(2)];
                 end
             end
             for i = 1:length(T2)
@@ -185,10 +448,57 @@ function main(folder,numofclasses,classifier)
                 x2=g3(x,cov2,w21,w22);
                 if(x1>x2)
                     confusion(2,1)=confusion(2,1)+1;
+                    X1=[X1 ;x(1)];
+                    Y1=[Y1 ;x(2)];
                 else
                     confusion(2,2)=confusion(2,2)+1;
+                    X2=[X2 ;x(1)];
+                    Y2=[Y2 ;x(2)];
                 end
             end
+            maxX=max(max(X1),max(X2));
+            minX=min(min(X1),min(X2));
+            maxY=max(max(Y1),max(Y2));
+            minY=min(min(Y1),min(Y2));
+            minX=minX-1;
+            maxX=maxX+1;
+            minY=minY-1;
+            maxY=maxY+1;
+            incX=(maxX-minX)/150;
+            incY=(maxY-minY)/150;
+            BX1=0;
+            BY1=0;
+            BX2=0;
+            BY2=0;
+            row=0;
+            for bgx = minX:incX:maxX
+                row = row+1;
+                col=0;
+                for bgy = minY:incY:maxY
+                    col = col+1;;
+                    CX(row,col)=bgx;
+                    CY(row,col)=bgy;
+                    x=[bgx;bgy];
+                    x1=g3(x,cov1,w11,w12);
+                    x2=g3(x,cov2,w21,w22);
+                    CZ1(row,col)=(x1*100);
+                    CZ2(row,col)=(x2*100);
+                    if(x1>x2)
+                        BX1=[BX1 ;x(1)];
+                        BY1=[BY1 ;x(2)];
+                    else
+                        BX2=[BX2 ;x(1)];
+                        BY2=[BY2 ;x(2)];
+                    end
+                end
+            end
+            BX1 = BX1(2:length(BX1));
+            BX2 = BX2(2:length(BX2));
+            BY1 = BY1(2:length(BY1));
+            BY2 = BY2(2:length(BY2));
+            plot(BX1,BY1,'.','Color',[1 .5 .5]),hold on,plot(BX2,BY2,'.','Color',[.5 .5 1]),plot(X1,Y1,'r.',X2,Y2,'b.'),axis([minX maxX minY maxY]),xlabel('x'),ylabel('y'),title(strcat(name,'-AllClasses')),legend('Class1','Class2'),set(gca,'Color',[1 1 1]),hold off;
+            figure
+            contour(CX,CY,CZ1,'r'),hold on,contour(CX,CY,CZ2,'b'),legend('Class1','Class2'),xlabel('x'),ylabel('y'),title(strcat(name,'-Contour')),hold off
         end
         N1 = length(T1);
         N2 = length(T2);
@@ -239,6 +549,12 @@ function main(folder,numofclasses,classifier)
         cov2 = myCov(D2,mean2);
         cov3 = myCov(D3,mean3);
         confusion=zeros(3,3);
+        X1 = D1(:,1);
+        Y1 = D1(:,2);
+        X2 = D2(:,1);
+        Y2 = D2(:,2);
+        X3 = D3(:,1);
+        Y3 = D3(:,2);
         if(classifier==1)
             cov = (cov1+cov2+cov3)/2;
             w11 = myTrans(myMult(myInv(cov),mean1));
@@ -254,10 +570,13 @@ function main(folder,numofclasses,classifier)
                 x3=g2(x,w31,w32);
                 if(x1>x2 && x1>x3)
                     confusion(1,1)=confusion(1,1)+1;
+                    plot(x(1),x(2),'r')
                 elseif(x2>x1 && x2>x3)
                     confusion(1,2)=confusion(1,2)+1;
+                    plot(x(1),x(2),'b')
                 elseif(x3>x1 && x3>x2)
                     confusion(1,3)=confusion(1,3)+1;
+                    plot(x(1),x(2),'g')
                 end
             end
             for i = 1:length(T2)
@@ -267,10 +586,13 @@ function main(folder,numofclasses,classifier)
                 x3=g2(x,w31,w32);
                 if(x1>x2 && x1>x3)
                     confusion(2,1)=confusion(2,1)+1;
+                    plot(x(1),x(2),'r')
                 elseif(x2>x1 && x2>x3)
                     confusion(2,2)=confusion(2,2)+1;
+                    plot(x(1),x(2),'b')
                 elseif(x3>x1 && x3>x2)
                     confusion(2,3)=confusion(2,3)+1;
+                    plot(x(1),x(2),'g')
                 end
             end
             for i = 1:length(T3)
@@ -279,13 +601,71 @@ function main(folder,numofclasses,classifier)
                 x2=g2(x,w21,w22);
                 x3=g2(x,w31,w32);
                 if(x1>x2 && x1>x3)
+                    X1=[X1 ;x(1)];
+                    Y1=[Y1 ;x(2)];
                     confusion(3,1)=confusion(3,1)+1;
                 elseif(x2>x1 && x2>x3)
+                    X2=[X2 ;x(1)];
+                    Y2=[Y2 ;x(2)];
                     confusion(3,2)=confusion(3,2)+1;
                 elseif(x3>x1 && x3>x2)
+                    X3=[X3 ;x(1)];
+                    Y3=[Y3 ;x(2)];
                     confusion(3,3)=confusion(3,3)+1;
                 end
             end
+            maxX=max(max(X1),max(X2));
+            minX=min(min(X1),min(X2));
+            maxY=max(max(Y1),max(Y2));
+            minY=min(min(Y1),min(Y2));
+            minX=minX-1;
+            maxX=maxX+1;
+            minY=minY-1;
+            maxY=maxY+1;
+            incX=(maxX-minX)/150;
+            incY=(maxY-minY)/150;
+            BX1=0;
+            BY1=0;
+            BY3=0;
+            BX3=0;
+            BX2=0;
+            BY2=0;
+            row=0;
+            for bgx = minX:incX:maxX
+                row = row+1;
+                col=0;
+                for bgy = minY:incY:maxY
+                    col = col+1;;
+                    CX(row,col)=bgx;
+                    CY(row,col)=bgy;
+                    x=[bgx;bgy];
+                    x1=g2(x,w11,w12);
+                    x2=g2(x,w21,w22);
+                    x3=g2(x,w31,w32);
+                    CZ1(row,col)=(x1);
+                    CZ2(row,col)=(x2);
+                    CZ3(row,col)=(x3);
+                    if(x1>x2 && x1>x3)
+                        BX1=[BX1 ;x(1)];
+                        BY1=[BY1 ;x(2)];
+                    elseif(x2>x1 && x2>x3)
+                        BX2=[BX2 ;x(1)];
+                        BY2=[BY2 ;x(2)];
+                    elseif(x3>x1 && x3>x2)
+                        BX3=[BX3 ;x(1)];
+                        BY3=[BY3 ;x(2)];
+                    end
+                end
+            end
+            BX1 = BX1(2:length(BX1));
+            BX2 = BX2(2:length(BX2));
+            BX3 = BX3(2:length(BX3));
+            BY1 = BY1(2:length(BY1));
+            BY2 = BY2(2:length(BY2));
+            BY3 = BY3(2:length(BY3));
+            plot(BX1,BY1,'.','Color',[1 0.5 0.5 ]),hold on,plot(BX2,BY2,'.','Color',[0.5 0.5 1]),plot(BX3,BY3,'.','Color',[0.5 1 .5]),plot(X1,Y1,'r.',X2,Y2,'b.',X3,Y3,'g.'),legend('Class1','Class2','Class3'),axis([minX maxX minY maxY]),xlabel('x'),ylabel('y'),title(strcat(name,'-AllClasses'));
+            figure
+            contour(CX,CY,CZ1,'r'),hold on,contour(CX,CY,CZ2,'b'),contour(CX,CY,CZ3,'g'),legend('Class1','Class2','Class3'),title(strcat(name,'-Contour')),xlabel('x'),ylabel('y'),hold off
         elseif(classifier==2)
             cov = myCov([D1;D2;D3],myMean([D1;D2;D3]));
             w11 = myTrans(myMult(myInv(cov),mean1));
