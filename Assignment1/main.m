@@ -1,6 +1,6 @@
-prompt='Enter dataset number : ';
+prompt='\nDatasets : \n1)LinearlySeparableData \n2)NonLinearlySeparableData-Interlock \n3)NonLinearlySeparableData-Ring \n4)NonLinearlySeparableData-Spiral \n5)OverlappingData \n6)RealData \nEnter dataset number : ';
 dataset= input(prompt);
-prompt='Enter classifier number : ';
+prompt='\nClassifiers : \n1)Bayes-SameCovarianceMatrix(i) \n2)Bayes-SameCovarianceMatrix(ii) \n3)Bayes-DifferentCovarianceMatrix \n4)NaiveBayes-SigmalCovarianceMatrix \n5)NaiveBayes-SameCovarianceMatrix \n6)NaiveBayes-DifferentCovarianceMatrix \nEnter classifier number : ';
 classifier= input(prompt);
     if(dataset==1)
         folder='LS_Group9';
